@@ -1,0 +1,19 @@
+[project]
+name = "collections"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.17.2",
+    "asyncpg>=0.31.0",
+    "fastapi[standard]>=0.128.0",
+    "greenlet>=3.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "ansible>=13.2.0",
+    "mypy>=1.19.1",
+    "pip-audit>=2.10.0",
+    "ruff>=0.14.10",
+]
