@@ -1,0 +1,19 @@
+name: CI
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        name: install python and uv
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      - name: install dependencies
+        run: uv sync
+      - name: lint
+        run: uv run ruff check --output-format=github
+      - name: format
+        run: uv run ruff format --diff
