@@ -17,3 +17,5 @@ jobs:
         run: uv run ruff check --output-format=github
       - name: format
         run: uv run ruff format --diff
+      - name: tests
+        run: uv run pytest
