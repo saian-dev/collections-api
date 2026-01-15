@@ -8,6 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     database_url: str
+    test_database_url: str | None = None
     base_url: HttpUrl = "http://0.0.0.0:8000"
     api_prefix: str = "/api/v1"
 

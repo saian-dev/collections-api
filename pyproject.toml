@@ -53,6 +53,8 @@ indent-style = "space"
 skip-magic-trailing-comma = false
 
 [tool.pytest]
+pythonpath = [".", "src"]
+asyncio_mode = "auto"
 testpaths = [
     "tests",
 ]

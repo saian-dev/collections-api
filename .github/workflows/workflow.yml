@@ -25,5 +25,5 @@ jobs:
 
       - name: tests
         env:
-          DATABASE_URL: "postgresql+asyncpg://user:pass@localhost:5432/collections_db"
+          TEST_DATABASE_URL: "postgresql+asyncpg://user:pass@localhost:5432/collections_db"
         run: uv run pytest
