@@ -24,7 +24,7 @@ jobs:
 
       - name: setup PostgreSQL extensions
         run: |
-          psql -h localhost -U postgres -d test_collections <<EOF
+          psql -h localhost -U postgres -d collections_db <<EOF
             CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
             CREATE EXTENSION IF NOT EXISTS "pg_trgm";
             CREATE EXTENSION IF NOT EXISTS "btree_gin";
