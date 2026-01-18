@@ -1,0 +1,7 @@
+{{ caddy.domain }} {
+    reverse_proxy {{ uvicorn.host }}:{{ uvicorn.port }}
+    
+    log {
+        output file /var/log/caddy/{{ app.name }}.log
+    }
+}

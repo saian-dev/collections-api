@@ -1,0 +1,23 @@
+app:
+  name: collections-api
+  user: collections
+  group: collections
+  dir: /var/www/collections-api
+
+repo:
+  url: https://github.com/saian-dev/collections-api.git
+  branch: main
+
+python:
+  version: "3.12"
+
+postgres:
+  version: 16
+  db_name: collections_db
+  user: collections
+  password: "{{ vault_postgres_password }}"
+
+uvicorn:
+  host: 127.0.0.1
+  port: 8000
+  workers: 2

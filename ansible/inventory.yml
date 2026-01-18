@@ -2,3 +2,5 @@ local:
   hosts:
     host1:
       ansible_host: 192.168.100.42
+      ansible_user: space_cat
+      ansible_python_interpreter: /usr/bin/python3

@@ -19,10 +19,10 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - name: copy repository
+      - name: Copy repository
         uses: actions/checkout@v5
 
-      - name: setup PostgreSQL extensions
+      - name: Setup PostgreSQL extensions
         run: |
           psql -h localhost -U postgres -d collections_db <<EOF
             CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -32,22 +32,22 @@ jobs:
         env:
           PGPASSWORD: postgres
 
-      - name: install python and uv
+      - name: Install python and uv
         uses: astral-sh/setup-uv@v6
         with:
           python-version: '3.12'
           enable-cache: true
 
-      - name: install dependencies
+      - name: Install dependencies
         run: uv sync
 
-      - name: lint
+      - name: Lint
         run: uv run ruff check --output-format=github
 
-      - name: format
+      - name: Format
         run: uv run ruff format --diff
 
-      - name: tests
+      - name: Tests
         env:
           DATABASE_URL: ""
           TEST_DATABASE_URL: "postgresql+asyncpg://postgres:postgres@localhost:5432/collections_db"

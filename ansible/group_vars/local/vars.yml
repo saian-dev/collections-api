@@ -1,2 +1,2 @@
-ansible_user: space_cat
-ansible_ssh_pass: "{{ vault_ansible_ssh_pass }}"
+caddy:
+  domain: collections.localhost

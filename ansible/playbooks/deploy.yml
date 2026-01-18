@@ -1,0 +1,82 @@
+- name: Deploy Collections API
+  hosts: local
+  become: true
+  vars_files:
+    - ../vars/main.yml
+    - ../vars/secrets.yml
+    - ../group_vars/local/vars.yml
+
+  tasks:
+    # ─────────────────────────────────────────────
+    # Clone / Pull code
+    # ─────────────────────────────────────────────
+    - name: Clone or update repository
+      ansible.builtin.git:
+        repo: "{{ repo.url }}"
+        dest: "{{ app.dir }}"
+        version: "{{ repo.branch }}"
+        force: true
+      become_user: "{{ app.user }}"
+      register: git_result
+
+    # ─────────────────────────────────────────────
+    # Environment file
+    # ─────────────────────────────────────────────
+    - name: Create .env file
+      ansible.builtin.template:
+        src: ../templates/env.j2
+        dest: "{{ app.dir }}/.env"
+        owner: "{{ app.user }}"
+        group: "{{ app.group }}"
+        mode: "0600"
+
+    # ─────────────────────────────────────────────
+    # Install dependencies
+    # ─────────────────────────────────────────────
+    - name: Install uv for app user
+      ansible.builtin.shell: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+      args:
+        creates: /home/{{ app.user }}/.local/bin/uv
+      become_user: "{{ app.user }}"
+
+    - name: Install Python dependencies
+      ansible.builtin.shell: |
+        /home/{{ app_user }}/.local/bin/uv sync
+      args:
+        chdir: "{{ app.dir }}"
+      become_user: "{{ app.user }}"
+      when: git_result.changed
+
+    # ─────────────────────────────────────────────
+    # Database migrations
+    # ─────────────────────────────────────────────
+    - name: Run database migrations
+      ansible.builtin.shell: |
+        /home/{{ app_user }}/.local/bin/uv run alembic upgrade head
+      args:
+        chdir: "{{ app.dir }}"
+      become_user: "{{ app.user }}"
+      when: git_result.changed
+
+    # ─────────────────────────────────────────────
+    # Restart application
+    # ─────────────────────────────────────────────
+    - name: Restart application
+      ansible.builtin.systemd:
+        name: "{{ app.name }}"
+        state: restarted
+      when: git_result.changed
+
+    # ─────────────────────────────────────────────
+    # Health check
+    # ─────────────────────────────────────────────
+    - name: Wait for application to start
+      ansible.builtin.uri:
+        url: "http://{{ uvicorn_host }}:{{ uvicorn_port }}/api/v1/games"
+        status_code: 200
+      register: health_check
+      retries: 5
+      delay: 3
+      until: health_check.status == 200
+      when: git_result.changed

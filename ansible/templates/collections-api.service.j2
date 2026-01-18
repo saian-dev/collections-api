@@ -1,0 +1,17 @@
+[Unit]
+Description={{ app.name }}
+After=network.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User={{ app.user }}
+Group={{ app.group }}
+WorkingDirectory={{ app.dir }}
+Environment="PATH=/home/{{ app.user }}/.local/bin:/usr/bin"
+ExecStart=/home/{{ app.user }}/.local/bin/uv run uvicorn src.main:app --host {{ uvicorn.host }} --port {{ uvicorn.port }} --workers {{ uvicorn.workers }}
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
