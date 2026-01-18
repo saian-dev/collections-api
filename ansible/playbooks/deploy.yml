@@ -42,7 +42,7 @@
 
     - name: Install Python dependencies
       ansible.builtin.shell: |
-        /home/{{ app_user }}/.local/bin/uv sync
+        /home/{{ app.user }}/.local/bin/uv sync
       args:
         chdir: "{{ app.dir }}"
       become_user: "{{ app.user }}"
@@ -53,7 +53,7 @@
     # ─────────────────────────────────────────────
     - name: Run database migrations
       ansible.builtin.shell: |
-        /home/{{ app_user }}/.local/bin/uv run alembic upgrade head
+        /home/{{ app.user }}/.local/bin/uv run alembic upgrade head
       args:
         chdir: "{{ app.dir }}"
       become_user: "{{ app.user }}"
@@ -73,7 +73,7 @@
     # ─────────────────────────────────────────────
     - name: Wait for application to start
       ansible.builtin.uri:
-        url: "http://{{ uvicorn_host }}:{{ uvicorn_port }}/api/v1/games"
+        url: "http://{{ uvicorn.host }}:{{ uvicorn.port }}/api/v1/games"
         status_code: 200
       register: health_check
       retries: 5

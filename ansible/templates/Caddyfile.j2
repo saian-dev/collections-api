@@ -1,4 +1,4 @@
-{{ caddy.domain }} {
+http://{{ caddy.domain }} {
     reverse_proxy {{ uvicorn.host }}:{{ uvicorn.port }}
     
     log {

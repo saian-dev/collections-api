@@ -81,7 +81,7 @@
     - name: Run SQL queries
       become_user: postgres
       community.postgresql.postgresql_query:
-        name: "{{ postgres.db_name }}"
+        login_db: "{{ postgres.db_name }}"
         query: |
           CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
           CREATE EXTENSION IF NOT EXISTS "pg_trgm";
