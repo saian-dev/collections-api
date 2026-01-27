@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 from src.config import get_settings
 from src.database.core import Base
+from src.games.models import Game
 
 
 settings = get_settings()
