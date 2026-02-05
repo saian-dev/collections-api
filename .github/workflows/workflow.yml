@@ -47,6 +47,9 @@ jobs:
       - name: Format
         run: uv run ruff format --diff
 
+      - name: Type check
+        run: uv run mypy .
+
       - name: Tests
         env:
           DATABASE_URL: ""

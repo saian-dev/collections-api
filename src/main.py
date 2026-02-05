@@ -32,4 +32,4 @@ app.include_router(setup_routes())
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host=settings.base_url.host, port=settings.base_url.port)
+    uvicorn.run(app, host=settings.base_url.host, port=settings.base_url.port)  # type: ignore[arg-type]
